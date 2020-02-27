@@ -5,101 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aula 01</title>
     <link rel="stylesheet" href="libs/bootstrap.css">
-    <style>
-      .jumbotron{
-        width: 600px;
-        text-align: center;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 20px;
-      }
-      .table{
-        margin-top: 20px;
-      }
-      .btn{
-        margin-top: 10px;
-      }
-      .form-adicionar{
-        margin-top: 20px;
-      }
-      .selecionado{
-        background-color: yellow;
-      }
-      .negrito{
-        font-weight: bold;
-      }
-      .color{
-        width: 20px;
-        height: 20px;
-      }
-      .rodape{
-        text-align: center;
-        font-size: 14px;
-        font-weight: bold;
-        background-color: green;
-        padding: 1rem 0;
-      }
-      .alert{
-        margin-top: 12px;
-      }
-    </style>
+    <link rel="stylesheet" href="css/app.css">
+    
     <script src='libs/angular.js'></script>
-    <script>
-      angular.module('listaTelefonica', []);
-      angular.module('listaTelefonica')
-        .controller('listaTelefonicaController', ($scope, $http) => {
-          
-          $scope.app = 'Lista Telefonica';
-          $scope.operadoras = [];
-          $scope.contatos = [];
+    <script src='js/app.js'></script>
+    <script src='js/services/listaTelefonicaService.js'></script>
+    <script src='js/services/operadorasService.js'></script>
+    <script src='js/services/configService.js'></script>
+    <script src='js/services/serialGenerationProvider.js'></script>
+    <script src='config/serialGenerationConfig.js'></script>
+    <script src='filters/nameFilter.js'></script>
+    <script src='filters/ellipsisFilter.js'></script>
+    <script src='directives/uiAlertDirective.js'></script>
 
-          $scope.adicionarContato = contato => {
-            $http.post('http://localhost:3000/api/contatos', contato)
-              .then(res => res.data)
-              .then(data => {
-                $scope.contatoForm.$setPristine();
-                delete $scope.contato;
-                $scope.contatos = data
-              });
-            }
-
-          $scope.apagarContatos = contatos => {
-            $scope.contatos = contatos.filter(c => {
-              if(c.selecionado){
-                $http.delete('http://localhost:3000/api/contatos/' + c.id);
-                return '';
-              }
-              return c
-            });
-          }
-
-          $scope.isContatosSelecionados = contatos => {
-            return contatos.some(contato => (
-              contato.selecionado
-            ));
-          }
-
-          $scope.ordenarPor = campo => {
-            $scope.criterioOrdenacao = campo;
-            $scope.direcaoOrdenacao = !$scope.direcaoOrdenacao;
-          }
-
-          const carregaContatos = () => {
-            $http.get('http://localhost:3000/api/contatos')
-              .then(res => res.data)
-              .then(data => $scope.contatos = data);        
-          };
-
-          const carregaOperadoras = () => {
-            $http.get('http://localhost:3000/api/operadoras')
-              .then(res => res.data)
-              .then(data => $scope.operadoras = data);
-          }
-
-          carregaContatos();
-          carregaOperadoras();
-        });
-    </script>
+    <script src='js/controller/listaTelefonicaController.js'></script>
   </head>
 
   <body ng-controller='listaTelefonicaController'>
@@ -109,9 +28,15 @@
         type='text' 
         ng-model='criterioDeBusca'
         placeholder="Buscar" />
+        <ui-alert 
+          title='Ops, aconteceu algo errado!'
+          message='error'
+          ng-if='error'></ui-alert>
+           
       <table class="table" ng-show='contatos.length > 0'>
         <tr>
           <th></th>
+          <th>Serial</th>
           <th><a href='' ng-click='ordenarPor("nome")'>Nome</a></th>
           <th><a href='' ng-click='ordenarPor("telefone")'>Telefone</a></th>
           <th><a href='' ng-click='ordenarPor("operadora")'>Operadora</a></th>
@@ -121,10 +46,11 @@
         <tr 
           ng-repeat='contato in contatos | filter:{nome: criterioDeBusca} | orderBy: criterioOrdenacao : direcaoOrdenacao'
           ng-class='{"selecionado negrito": contato.selecionado}'>
-          <th><input type="checkbox" ng-model='contato.selecionado'/></th>
-          <td>{{contato.nome}}</td>
+          <td><input type="checkbox" ng-model='contato.selecionado'/></td>
+          <td>{{contato.serial}}</td>
+          <td>{{contato.nome | nameFilter | ellipsisFilter: 5}}</td>
           <td>{{contato.telefone}}</td>
-          <td>{{contato.operadora.nome | lowercase}}</td>
+          <td>{{contato.operadora.nome}}</td>
           <td>{{contato.data | date:'dd/MM/yyyy HH:mm'}}</td>
           <td>
             <div 
@@ -188,7 +114,7 @@
         </button>
       </form>
     </div>
-    <div ng-include='"rodape.html"'></div>
+    <div ng-include='"view/rodape.html"'></div>
   </body>
 
 </html>
