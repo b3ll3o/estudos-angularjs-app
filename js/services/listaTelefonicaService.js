@@ -2,15 +2,15 @@ angular.module('listaTelefonica')
   .factory('listaTelefonicaService', ($http, configService) => {
 
     const getContatos = () => (
-      $http.get(configService.baseUrl + '/contatos')
+      $http.get('http://localhost:3000/api/contatos')
     );
 
     const saveContato = contato => (
-      $http.post(configService.baseUrl + '/contatos', contato)
+      $http.post('http://localhost:3000/api/contatos', contato)
     );
 
     const deleteContato = id => (
-      $http.delete(configService.baseUrl + '/contatos/' + id)
+      $http.delete('http://localhost:3000/api/contatos/' + id)
     );
 
     return {

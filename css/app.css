@@ -53,3 +53,11 @@
 .ui-alert-message{
   color: #af4341;
 }
+
+.ui-accordion-title{
+  padding: .5rem;
+  background-color: blue;
+  margin: .5rem 0;
+  border-radius: .5rem;
+  color: white;
+}
