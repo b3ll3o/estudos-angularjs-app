@@ -1,21 +1,8 @@
 angular.module('listaTelefonica')
-  .controller('listaTelefonicaController', ($scope, listaTelefonicaService, operadorasService, serialGeneration) => {
+  .controller('listaTelefonicaController', function($scope, listaTelefonicaService){
     
     $scope.app = 'Lista Telefonica';
-    $scope.operadoras = [];
     $scope.contatos = [];
-
-    $scope.adicionarContato = contato => {
-      
-      contato.serial = serialGeneration.generate();
-      listaTelefonicaService.saveContato(contato)
-        .then(res => res.data)
-        .then(data => {
-          $scope.contatoForm.$setPristine();
-          delete $scope.contato;
-          $scope.contatos = data
-        });
-      }
 
     $scope.apagarContatos = contatos => {
       $scope.contatos = contatos.filter(c => {
@@ -47,12 +34,5 @@ angular.module('listaTelefonica')
         }) 
     };
 
-    const carregaOperadoras = () => {
-      operadorasService.getOperadoras()
-        .then(res => res.data)
-        .then(data => $scope.operadoras = data);
-    }
-
     carregaContatos();
-    carregaOperadoras();
   });

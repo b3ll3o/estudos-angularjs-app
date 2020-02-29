@@ -1,5 +1,5 @@
 angular.module('listaTelefonica')
-  .factory('listaTelefonicaService', ($http, configService) => {
+  .factory('listaTelefonicaService', $http => {
 
     const getContatos = () => (
       $http.get('http://localhost:3000/api/contatos')
