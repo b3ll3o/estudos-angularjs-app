@@ -17,6 +17,25 @@ angular.module('listaTelefonica')
         }
       })
 
+      .when('/detalhesContato/:id', {
+        templateUrl: 'view/detalhes.html', 
+        controller: 'DetalhesController', 
+        resolve: {
+          contato: (listaTelefonicaService, $route) => (
+            listaTelefonicaService.getContato($route.current.params.id)
+          )
+        }
+      })
+
+      .when('/error', {
+        templateUrl: 'view/error.html', 
+        resolve: {
+          operadoras: operadorasService => (
+            operadorasService.getOperadoras()
+          )
+        }
+      })
+
       .otherwise({
         redirectTo: '/contatos'
       });

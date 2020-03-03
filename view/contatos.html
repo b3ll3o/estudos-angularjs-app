@@ -23,7 +23,7 @@
   <ui-alert title='Ops, aconteceu algo errado!' message='error' ng-if='error'></ui-alert>
 
   <input class="form-control" type='text' ng-model='criterioDeBusca' placeholder="Buscar" />
-
+  
   <table class="table" ng-show='contatos.length > 0'>
     <tr>
       <th></th>
@@ -38,7 +38,7 @@
       ng-class='{"selecionado negrito": contato.selecionado}'>
       <td><input type="checkbox" ng-model='contato.selecionado' /></td>
       <td>{{contato.serial}}</td>
-      <td>{{contato.nome | nameFilter | ellipsisFilter: 5}}</td>
+      <td><a href='#/detalhesContato/{{contato.id}}'>{{contato.nome | nameFilter }}</a></td>
       <td>{{contato.telefone}}</td>
       <td>{{contato.operadora.nome}}</td>
       <td>{{contato.data | date:'dd/MM/yyyy HH:mm'}}</td>

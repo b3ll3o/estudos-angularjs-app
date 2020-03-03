@@ -28,14 +28,25 @@
 
     <script src='js/controller/listaTelefonicaController.js'></script>
     <script src='js/controller/novoContatoController.js'></script>
+    <script src='js/controller/DetalhesController.js'></script>
 
+    <script src='js/interceptors/TimeStampInterceptor.js'></script>
+    <script src='js/interceptors/ErrorInterceptor.js'></script>
+    <script src='js/interceptors/LoadingInterceptor.js'></script>
+
+    <script src='config/InterceptorsConfig.js'></script>
     <script src='config/routeConfig.js'></script>
 
   </head>
 
   <body>
-    <ng-view></ng-view>
-    <div ng-include='"view/rodape.html"'></div>
+    <div class='jumbotron' ng-show='loading'>
+      <h5>Carregando, por favor aguarde...</h5>
+    </div>
+    <div ng-hide='loading'>
+      <ng-view></ng-view>
+      <div ng-include='"view/rodape.html"'></div>
+    </div>
   </body>
 
 </html>

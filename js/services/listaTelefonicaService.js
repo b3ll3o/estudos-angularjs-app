@@ -1,21 +1,20 @@
 angular.module('listaTelefonica')
-  .factory('listaTelefonicaService', $http => {
+  .factory('listaTelefonicaService', $http => ({
 
-    const getContatos = () => (
+    getContatos: () => (
       $http.get('http://localhost:3000/api/contatos')
-    );
+    ),
 
-    const saveContato = contato => (
+    getContato: id => (
+      $http.get('http://localhost:3000/api/contatos/' + id)
+        .then(res => res.data)
+    ),
+
+    saveContato: contato => (
       $http.post('http://localhost:3000/api/contatos', contato)
-    );
+    ),
 
-    const deleteContato = id => (
+    deleteContato: id => (
       $http.delete('http://localhost:3000/api/contatos/' + id)
-    );
-
-    return {
-      getContatos, 
-      saveContato, 
-      deleteContato
-    }
-  });
+    )
+  }));
